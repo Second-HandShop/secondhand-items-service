@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -13,54 +14,101 @@ import javax.validation.constraints.*;
  * SoldInfo
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-01T02:18:22.352Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-01T22:59:12.369Z")
 
 
 public class SoldInfo   {
-  @JsonProperty("price")
-  private Float price = null;
+  @JsonProperty("itemId")
+  private Long itemId = null;
 
-  @JsonProperty("userId")
-  private String userId = null;
+  @JsonProperty("soldAtPrice")
+  private Float soldAtPrice = null;
 
-  public SoldInfo price(Float price) {
-    this.price = price;
+  @JsonProperty("soldOn")
+  private OffsetDateTime soldOn = null;
+
+  @JsonProperty("soldToUserId")
+  private String soldToUserId = null;
+
+  public SoldInfo itemId(Long itemId) {
+    this.itemId = itemId;
     return this;
   }
 
   /**
-   * Get price
-   * @return price
+   * Get itemId
+   * @return itemId
   **/
   @ApiModelProperty(value = "")
 
 
-  public Float getPrice() {
-    return price;
+  public Long getItemId() {
+    return itemId;
   }
 
-  public void setPrice(Float price) {
-    this.price = price;
+  public void setItemId(Long itemId) {
+    this.itemId = itemId;
   }
 
-  public SoldInfo userId(String userId) {
-    this.userId = userId;
+  public SoldInfo soldAtPrice(Float soldAtPrice) {
+    this.soldAtPrice = soldAtPrice;
     return this;
   }
 
   /**
-   * Get userId
-   * @return userId
+   * Get soldAtPrice
+   * @return soldAtPrice
   **/
   @ApiModelProperty(value = "")
 
 
-  public String getUserId() {
-    return userId;
+  public Float getSoldAtPrice() {
+    return soldAtPrice;
   }
 
-  public void setUserId(String userId) {
-    this.userId = userId;
+  public void setSoldAtPrice(Float soldAtPrice) {
+    this.soldAtPrice = soldAtPrice;
+  }
+
+  public SoldInfo soldOn(OffsetDateTime soldOn) {
+    this.soldOn = soldOn;
+    return this;
+  }
+
+  /**
+   * Get soldOn
+   * @return soldOn
+  **/
+  @ApiModelProperty(value = "")
+
+  @Valid
+
+  public OffsetDateTime getSoldOn() {
+    return soldOn;
+  }
+
+  public void setSoldOn(OffsetDateTime soldOn) {
+    this.soldOn = soldOn;
+  }
+
+  public SoldInfo soldToUserId(String soldToUserId) {
+    this.soldToUserId = soldToUserId;
+    return this;
+  }
+
+  /**
+   * Get soldToUserId
+   * @return soldToUserId
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getSoldToUserId() {
+    return soldToUserId;
+  }
+
+  public void setSoldToUserId(String soldToUserId) {
+    this.soldToUserId = soldToUserId;
   }
 
 
@@ -73,13 +121,15 @@ public class SoldInfo   {
       return false;
     }
     SoldInfo soldInfo = (SoldInfo) o;
-    return Objects.equals(this.price, soldInfo.price) &&
-        Objects.equals(this.userId, soldInfo.userId);
+    return Objects.equals(this.itemId, soldInfo.itemId) &&
+        Objects.equals(this.soldAtPrice, soldInfo.soldAtPrice) &&
+        Objects.equals(this.soldOn, soldInfo.soldOn) &&
+        Objects.equals(this.soldToUserId, soldInfo.soldToUserId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(price, userId);
+    return Objects.hash(itemId, soldAtPrice, soldOn, soldToUserId);
   }
 
   @Override
@@ -87,8 +137,10 @@ public class SoldInfo   {
     StringBuilder sb = new StringBuilder();
     sb.append("class SoldInfo {\n");
     
-    sb.append("    price: ").append(toIndentedString(price)).append("\n");
-    sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
+    sb.append("    itemId: ").append(toIndentedString(itemId)).append("\n");
+    sb.append("    soldAtPrice: ").append(toIndentedString(soldAtPrice)).append("\n");
+    sb.append("    soldOn: ").append(toIndentedString(soldOn)).append("\n");
+    sb.append("    soldToUserId: ").append(toIndentedString(soldToUserId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

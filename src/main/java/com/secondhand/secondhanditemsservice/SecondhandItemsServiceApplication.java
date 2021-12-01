@@ -5,15 +5,24 @@ import io.swagger.configuration.LocalDateTimeConverter;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.sql.DataSource;
+
 @SpringBootApplication
 @EnableSwagger2
-@ComponentScan(basePackages = { "io.swagger", "io.swagger.api" , "io.swagger.configuration", "com.secondhand.secondhanditemsservice.controller"})
+@ComponentScan(basePackages = {
+		"io.swagger", "io.swagger.api" ,
+		"io.swagger.configuration",
+		"com.secondhand.secondhanditemsservice.controller",
+		"com.secondhand.secondhanditemsservice.impl"
+})
 public class SecondhandItemsServiceApplication {
 
 	public static void main(String[] args) {
@@ -39,6 +48,20 @@ public class SecondhandItemsServiceApplication {
 			return 10;
 		}
 
+	}
+
+	@Configuration
+	public class DataSourceConfig {
+		@Bean
+		public DataSource getDataSource()
+		{
+			DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+			dataSourceBuilder.driverClassName("com.mysql.cj.jdbc.Driver");
+			dataSourceBuilder.url("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5455625");
+			dataSourceBuilder.username("sql5455625");
+			dataSourceBuilder.password("yHTFCRQrk5");
+			return dataSourceBuilder.build();
+		}
 	}
 
 }

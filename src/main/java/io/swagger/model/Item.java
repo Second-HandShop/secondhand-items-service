@@ -3,11 +3,12 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.ItemResource;
 import io.swagger.model.SoldInfo;
+import java.util.ArrayList;
+import java.util.List;
 import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -17,7 +18,7 @@ import javax.validation.constraints.*;
  * Item
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-01T02:18:22.352Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-01T22:59:12.369Z")
 
 
 public class Item   {
@@ -30,45 +31,8 @@ public class Item   {
   @JsonProperty("description")
   private String description = null;
 
-  /**
-   * Item category
-   */
-  public enum CategoryEnum {
-    FURNITURE("Furniture"),
-    
-    HOUSEHOLD("Household"),
-    
-    BOOKS_AND_SUPPLIES("Books and Supplies"),
-    
-    CARS("Cars"),
-    
-    ELECTRONICS("Electronics");
-
-    private String value;
-
-    CategoryEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static CategoryEnum fromValue(String text) {
-      for (CategoryEnum b : CategoryEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-
   @JsonProperty("category")
-  private CategoryEnum category = null;
+  private String category = null;
 
   @JsonProperty("addedOn")
   private OffsetDateTime addedOn = null;
@@ -83,7 +47,8 @@ public class Item   {
   private String userId = null;
 
   @JsonProperty("resources")
-  private ItemResource resources = null;
+  @Valid
+  private List<ItemResource> resources = null;
 
   public Item id(Long id) {
     this.id = id;
@@ -145,7 +110,7 @@ public class Item   {
     this.description = description;
   }
 
-  public Item category(CategoryEnum category) {
+  public Item category(String category) {
     this.category = category;
     return this;
   }
@@ -157,11 +122,11 @@ public class Item   {
   @ApiModelProperty(value = "Item category")
 
 
-  public CategoryEnum getCategory() {
+  public String getCategory() {
     return category;
   }
 
-  public void setCategory(CategoryEnum category) {
+  public void setCategory(String category) {
     this.category = category;
   }
 
@@ -247,8 +212,16 @@ public class Item   {
     this.userId = userId;
   }
 
-  public Item resources(ItemResource resources) {
+  public Item resources(List<ItemResource> resources) {
     this.resources = resources;
+    return this;
+  }
+
+  public Item addResourcesItem(ItemResource resourcesItem) {
+    if (this.resources == null) {
+      this.resources = new ArrayList<ItemResource>();
+    }
+    this.resources.add(resourcesItem);
     return this;
   }
 
@@ -260,11 +233,11 @@ public class Item   {
 
   @Valid
 
-  public ItemResource getResources() {
+  public List<ItemResource> getResources() {
     return resources;
   }
 
-  public void setResources(ItemResource resources) {
+  public void setResources(List<ItemResource> resources) {
     this.resources = resources;
   }
 

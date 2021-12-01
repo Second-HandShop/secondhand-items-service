@@ -31,7 +31,6 @@ paths:
         - name: "userIds"
           in: "query"
           description: "Items posted by given userIds will be retrieved"
-          required: true
           type: "array"
           items:
             type: "string"
@@ -40,9 +39,7 @@ paths:
         "200":
           description: "successful operation"
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/GetItemsByUserIdsResponse"
+            $ref: "#/definitions/GetItemsByUserIdsResponse"
         "400":
           description: "Invalid UserIds value"
 definitions:
@@ -68,12 +65,6 @@ definitions:
       category:
         type: "string"
         description: "Item category"
-        enum:
-          - "Furniture"
-          - "Household"
-          - "Books and Supplies"
-          - "Cars"
-          - "Electronics"
       addedOn:
         type: "string"
         format: "date-time"
@@ -85,16 +76,24 @@ definitions:
       userId:
         type: "string"
       resources:
-        $ref: "#/definitions/ItemResource"
+        type: array
+        items:
+          $ref: "#/definitions/ItemResource"
     xml:
       name: "item"
   SoldInfo:
     type: "object"
     properties:
-      price:
+      itemId:
+        type: "integer"
+        format: "int64"
+      soldAtPrice:
         type: "number"
         format: "float"
-      userId:
+      soldOn:
+        type: "string"
+        format: "date-time"
+      soldToUserId:
         type: "string"
   ItemResource:
     type: "object"
@@ -108,4 +107,3 @@ definitions:
           - "VIDEO"
       resourceLink:
         type: "string"
-

@@ -21,20 +21,20 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-01T02:18:22.352Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-01T22:59:12.369Z")
 
 @Validated
 @Api(value = "item", description = "the item API")
 @RequestMapping(value = "")
 public interface ItemApi {
 
-    @ApiOperation(value = "Finds items", nickname = "getItemsByUserIds", notes = "Multiple status values can be provided with comma separated strings", response = GetItemsByUserIdsResponse.class, responseContainer = "List", tags={ "item", })
+    @ApiOperation(value = "Finds items", nickname = "getItemsByUserIds", notes = "Multiple status values can be provided with comma separated strings", response = GetItemsByUserIdsResponse.class, tags={ "item", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "successful operation", response = GetItemsByUserIdsResponse.class, responseContainer = "List"),
+        @ApiResponse(code = 200, message = "successful operation", response = GetItemsByUserIdsResponse.class),
         @ApiResponse(code = 400, message = "Invalid UserIds value") })
     @RequestMapping(value = "/item",
         produces = { "application/xml", "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<GetItemsByUserIdsResponse>> getItemsByUserIds(@NotNull @ApiParam(value = "Items posted by given userIds will be retrieved", required = true) @Valid @RequestParam(value = "userIds", required = true) List<String> userIds);
+    ResponseEntity<GetItemsByUserIdsResponse> getItemsByUserIds(@ApiParam(value = "Items posted by given userIds will be retrieved") @Valid @RequestParam(value = "userIds", required = false) List<String> userIds);
 
 }
