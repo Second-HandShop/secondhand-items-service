@@ -29,19 +29,18 @@ public class ItemsManager {
         this.dataSource = dataSource;
     }
 
-    public List<Item> getItemsForUserIds(List<String> userIds){
+    public List<Item> getItemsForUserIds(List<String> userIds) throws SQLException{
         List<Item> itemList = new ArrayList<>();
-        try {
-            Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()) {
             Statement statement = connection.createStatement();
 
             StringBuilder sqlBuilder = new StringBuilder("SELECT * from items i left join ItemSoldInfo isi on i.id = isi.itemId ");
 
-            if(userIds != null && !userIds.isEmpty()) {
+            if (userIds != null && !userIds.isEmpty()) {
                 sqlBuilder.append(" where userId in (");
                 sqlBuilder.append("'").append(userIds.get(0)).append("'");
 
-                for(int i = 1; i < userIds.size(); i++) {
+                for (int i = 1; i < userIds.size(); i++) {
                     sqlBuilder.append(", ");
                     sqlBuilder.append("'").append(userIds.get(i)).append("'");
                 }
@@ -57,28 +56,27 @@ public class ItemsManager {
                 item.setCategory(resultSet.getString("category"));
                 item.setUserId(resultSet.getString("userId"));
 
-                if(resultSet.getBoolean("isSold")) {
+                if (resultSet.getBoolean("isSold")) {
                     SoldInfo soldInfo = new SoldInfo();
                     soldInfo.setSoldOn(OffsetDateTime.ofInstant(Instant.ofEpochMilli(resultSet.getDate("soldOn").getTime()), ZoneOffset.UTC));
                     soldInfo.setSoldAtPrice(resultSet.getFloat("soldAtPrice"));
                     soldInfo.setSoldToUserId(resultSet.getString("soldToUserId"));
                     item.setSoldInfo(soldInfo);
-                } else{
+                } else {
                     item.setSoldInfo(null);
                 }
                 itemList.add(item);
             }
 
-            updateResourcesForItems(itemList);
+            updateResourcesForItems(itemList, connection);
         } catch (SQLException se) {
             System.out.println("Error: " + se.getMessage());
         }
         return itemList;
     }
 
-    private void updateResourcesForItems(List<Item> itemList) {
+    private void updateResourcesForItems(List<Item> itemList, Connection connection) {
         try {
-            Connection connection = dataSource.getConnection();
             Statement statement = connection.createStatement();
 
             StringBuilder sqlBuilder = new StringBuilder("SELECT * from ItemResources where itemId in(");
@@ -116,6 +114,14 @@ public class ItemsManager {
             itemList.forEach(item -> {
                 item.setResources(itemIdToResourcesMap.get(item.getId()));
             });
+        } catch (SQLException se) {
+            System.out.println("Error: " + se.getMessage());
+        }
+    }
+
+    public void addItem(Item item) {
+        try (Connection connection = dataSource.getConnection()) {
+
         } catch (SQLException se) {
             System.out.println("Error: " + se.getMessage());
         }

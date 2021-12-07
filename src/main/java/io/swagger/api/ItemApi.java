@@ -6,6 +6,7 @@
 package io.swagger.api;
 
 import io.swagger.model.GetItemsByUserIdsResponse;
+import io.swagger.model.Item;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,20 +22,42 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-01T22:59:12.369Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-07T05:55:40.646Z")
 
 @Validated
 @Api(value = "item", description = "the item API")
 @RequestMapping(value = "")
 public interface ItemApi {
 
-    @ApiOperation(value = "Finds items", nickname = "getItemsByUserIds", notes = "Multiple status values can be provided with comma separated strings", response = GetItemsByUserIdsResponse.class, tags={ "item", })
+    @ApiOperation(value = "Add an Item", nickname = "addItem", notes = "Add an item for the user.", tags={ "item", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 405, message = "Invalid input") })
+    @RequestMapping(value = "/item",
+        produces = { "application/json" }, 
+        consumes = { "application/json" },
+        method = RequestMethod.POST)
+    ResponseEntity<Void> addItem(@ApiParam(value = "Item object that needs to be added." ,required=true )  @Valid @RequestBody Item body);
+
+
+    @ApiOperation(value = "Finds items", nickname = "getItemsByUserIds", notes = "Multiple UserId values can be provided with comma separated strings", response = GetItemsByUserIdsResponse.class, tags={ "item", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "successful operation", response = GetItemsByUserIdsResponse.class),
         @ApiResponse(code = 400, message = "Invalid UserIds value") })
     @RequestMapping(value = "/item",
-        produces = { "application/xml", "application/json" }, 
+        produces = { "application/json" }, 
         method = RequestMethod.GET)
     ResponseEntity<GetItemsByUserIdsResponse> getItemsByUserIds(@ApiParam(value = "Items posted by given userIds will be retrieved") @Valid @RequestParam(value = "userIds", required = false) List<String> userIds);
+
+
+    @ApiOperation(value = "Update an existing Item", nickname = "updateItem", notes = "", tags={ "item", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 400, message = "Invalid ID supplied"),
+        @ApiResponse(code = 404, message = "Item not found"),
+        @ApiResponse(code = 405, message = "Validation exception") })
+    @RequestMapping(value = "/item",
+        produces = { "application/json" }, 
+        consumes = { "application/json" },
+        method = RequestMethod.PUT)
+    ResponseEntity<Void> updateItem(@ApiParam(value = "Item object that needs to be updated." ,required=true )  @Valid @RequestBody Item body);
 
 }

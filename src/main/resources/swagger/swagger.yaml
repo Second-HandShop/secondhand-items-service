@@ -22,10 +22,9 @@ paths:
       tags:
         - "item"
       summary: "Finds items"
-      description: "Multiple status values can be provided with comma separated strings"
+      description: "Multiple UserId values can be provided with comma separated strings"
       operationId: "getItemsByUserIds"
       produces:
-        - "application/xml"
         - "application/json"
       parameters:
         - name: "userIds"
@@ -42,6 +41,50 @@ paths:
             $ref: "#/definitions/GetItemsByUserIdsResponse"
         "400":
           description: "Invalid UserIds value"
+    post:
+      tags:
+        - "item"
+      summary: "Add an Item"
+      description: "Add an item for the user."
+      operationId: "addItem"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Item object that needs to be added to the store"
+          required: true
+          schema:
+            $ref: "#/definitions/Item"
+      responses:
+        "405":
+          description: "Invalid input"
+    put:
+      tags:
+        - "item"
+      summary: "Update an existing Item"
+      description: ""
+      operationId: "updateItem"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Pet object that needs to be added to the store"
+          required: true
+          schema:
+            $ref: "#/definitions/Item"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Item not found"
+        "405":
+          description: "Validation exception"
 definitions:
   GetItemsByUserIdsResponse:
     type: "object"

@@ -3,27 +3,26 @@ package com.secondhand.secondhanditemsservice.controller;
 import com.secondhand.secondhanditemsservice.impl.ItemsManager;
 import io.swagger.api.ItemApi;
 import io.swagger.model.GetItemsByUserIdsResponse;
+import io.swagger.model.Item;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
-import io.swagger.model.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-01T02:18:22.352Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-07T05:55:40.646Z")
 
 @Controller
 public class ItemApiController implements ItemApi {
@@ -43,17 +42,13 @@ public class ItemApiController implements ItemApi {
         this.request = request;
     }
 
+    public ResponseEntity<Void> addItem(@ApiParam(value = "Item object that needs to be added." ,required=true )  @Valid @RequestBody Item body) {
+        String accept = request.getHeader("Accept");
+        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+    }
+
     public ResponseEntity<GetItemsByUserIdsResponse> getItemsByUserIds(@ApiParam(value = "Items posted by given userIds will be retrieved") @Valid @RequestParam(value = "userIds", required = false) List<String> userIds) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/xml")) {
-            try {
-                return new ResponseEntity<GetItemsByUserIdsResponse>(objectMapper.readValue("<null>  <userIdsToIdsMap></userIdsToIdsMap></null>", GetItemsByUserIdsResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/xml", e);
-                return new ResponseEntity<GetItemsByUserIdsResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
         if (accept != null && accept.contains("application/json")) {
             try {
                 List<Item> itemList = itemsManager.getItemsForUserIds(userIds);
@@ -73,10 +68,17 @@ public class ItemApiController implements ItemApi {
                 getItemsByUserIdsResponse.setUserIdsToIdsMap(userIdsToIdsMap);
                 return new ResponseEntity<GetItemsByUserIdsResponse>(getItemsByUserIdsResponse, HttpStatus.OK);
             } catch (Exception e) {
+                log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<GetItemsByUserIdsResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 
         return new ResponseEntity<GetItemsByUserIdsResponse>(HttpStatus.NOT_IMPLEMENTED);
     }
+
+    public ResponseEntity<Void> updateItem(@ApiParam(value = "Item object that needs to be updated." ,required=true )  @Valid @RequestBody Item body) {
+        String accept = request.getHeader("Accept");
+        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+    }
+
 }
