@@ -6,6 +6,7 @@ import io.swagger.model.GetItemsByUserIdsResponse;
 import io.swagger.model.Item;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
+import io.swagger.model.SoldInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +45,24 @@ public class ItemApiController implements ItemApi {
 
     public ResponseEntity<Void> addItem(@ApiParam(value = "Item object that needs to be added." ,required=true )  @Valid @RequestBody Item body) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        try {
+            int added = itemsManager.addItem(body);
+
+            if(added == 0) {
+                throw new Exception("Could not add data.");
+            }
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Exception: ", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public ResponseEntity<GetItemsByUserIdsResponse> getItemsByUserIds(@ApiParam(value = "Items posted by given userIds will be retrieved") @Valid @RequestParam(value = "userIds", required = false) List<String> userIds) {
+    public ResponseEntity<GetItemsByUserIdsResponse> getItemsByUserIds(@ApiParam(value = "Items posted by given userIds will be retrieved") @Valid @RequestParam(value = "userIds", required = false) List<String> userIds,@ApiParam(value = "Item name for search") @Valid @RequestParam(value = "name", required = false) String name) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                List<Item> itemList = itemsManager.getItemsForUserIds(userIds);
+                List<Item> itemList = itemsManager.getItemsForUserIds(userIds, name);
                 Map<String, List<Item>> userIdsToIdsMap = new HashMap<>();
 
                 itemList.forEach( item -> {
@@ -68,7 +79,7 @@ public class ItemApiController implements ItemApi {
                 getItemsByUserIdsResponse.setUserIdsToIdsMap(userIdsToIdsMap);
                 return new ResponseEntity<GetItemsByUserIdsResponse>(getItemsByUserIdsResponse, HttpStatus.OK);
             } catch (Exception e) {
-                log.error("Couldn't serialize response for content type application/json", e);
+                log.error("Exception: ", e);
                 return new ResponseEntity<GetItemsByUserIdsResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
@@ -78,7 +89,33 @@ public class ItemApiController implements ItemApi {
 
     public ResponseEntity<Void> updateItem(@ApiParam(value = "Item object that needs to be updated." ,required=true )  @Valid @RequestBody Item body) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+
+        try {
+            int updated = itemsManager.updateItem(body);
+
+            if(updated == 0) {
+                throw new Exception("Could not update data.");
+            }
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Exception: ", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<Void> addItemSoldInfo(@ApiParam(value = "Item Sold Info object that needs to be added." ,required=true )  @Valid @RequestBody SoldInfo body) {
+        String accept = request.getHeader("Accept");
+        try {
+            int updated = itemsManager.addSoldInfo(body);
+
+            if (updated == 0) {
+                throw new Exception("Could not update data.");
+            }
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Exception: ", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

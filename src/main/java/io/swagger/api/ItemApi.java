@@ -7,6 +7,7 @@ package io.swagger.api;
 
 import io.swagger.model.GetItemsByUserIdsResponse;
 import io.swagger.model.Item;
+import io.swagger.model.SoldInfo;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-07T05:55:40.646Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-08T06:06:07.363Z")
 
 @Validated
 @Api(value = "item", description = "the item API")
@@ -39,6 +40,16 @@ public interface ItemApi {
     ResponseEntity<Void> addItem(@ApiParam(value = "Item object that needs to be added." ,required=true )  @Valid @RequestBody Item body);
 
 
+    @ApiOperation(value = "Add an ItemSoldInfo", nickname = "addItemSoldInfo", notes = "Add an itemSoldInfo for an Item.", tags={ "item", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 405, message = "Invalid input") })
+    @RequestMapping(value = "/item/sold",
+        produces = { "application/json" }, 
+        consumes = { "application/json" },
+        method = RequestMethod.POST)
+    ResponseEntity<Void> addItemSoldInfo(@ApiParam(value = "Item Sold Info object that needs to be added." ,required=true )  @Valid @RequestBody SoldInfo body);
+
+
     @ApiOperation(value = "Finds items", nickname = "getItemsByUserIds", notes = "Multiple UserId values can be provided with comma separated strings", response = GetItemsByUserIdsResponse.class, tags={ "item", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "successful operation", response = GetItemsByUserIdsResponse.class),
@@ -46,7 +57,7 @@ public interface ItemApi {
     @RequestMapping(value = "/item",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<GetItemsByUserIdsResponse> getItemsByUserIds(@ApiParam(value = "Items posted by given userIds will be retrieved") @Valid @RequestParam(value = "userIds", required = false) List<String> userIds);
+    ResponseEntity<GetItemsByUserIdsResponse> getItemsByUserIds(@ApiParam(value = "Items posted by given userIds will be retrieved") @Valid @RequestParam(value = "userIds", required = false) List<String> userIds,@ApiParam(value = "Item name for search") @Valid @RequestParam(value = "name", required = false) String name);
 
 
     @ApiOperation(value = "Update an existing Item", nickname = "updateItem", notes = "", tags={ "item", })
