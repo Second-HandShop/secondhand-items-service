@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  * ItemResource
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-08T06:06:07.363Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-08T19:27:18.275Z")
 
 
 public class ItemResource   {

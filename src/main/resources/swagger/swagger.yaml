@@ -9,7 +9,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "com.secondhand"
+host: "localhost:8080"
 basePath: "/"
 tags:
   - name: "item"
@@ -34,6 +34,17 @@ paths:
           items:
             type: "string"
           collectionFormat: "multi"
+        - name: "categories"
+          in: "query"
+          description: "Items with given categories will be retrieved"
+          type: "array"
+          items:
+            type: "string"
+          collectionFormat: "multi"
+        - name: "name"
+          in: "query"
+          description: "Item name for search"
+          type: "string"
       responses:
         "200":
           description: "successful operation"
@@ -54,7 +65,7 @@ paths:
       parameters:
         - in: "body"
           name: "body"
-          description: "Item object that needs to be added to the store"
+          description: "Item object that needs to be added."
           required: true
           schema:
             $ref: "#/definitions/Item"
@@ -74,7 +85,7 @@ paths:
       parameters:
         - in: "body"
           name: "body"
-          description: "Pet object that needs to be added to the store"
+          description: "Item object that needs to be updated."
           required: true
           schema:
             $ref: "#/definitions/Item"
@@ -85,6 +96,27 @@ paths:
           description: "Item not found"
         "405":
           description: "Validation exception"
+  /item/sold:
+    post:
+      tags:
+        - "item"
+      summary: "Add an ItemSoldInfo"
+      description: "Add an itemSoldInfo for an Item."
+      operationId: "addItemSoldInfo"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Item Sold Info object that needs to be added."
+          required: true
+          schema:
+            $ref: "#/definitions/SoldInfo"
+      responses:
+        "405":
+          description: "Invalid input"
 definitions:
   GetItemsByUserIdsResponse:
     type: "object"

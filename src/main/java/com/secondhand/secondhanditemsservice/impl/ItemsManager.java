@@ -24,7 +24,7 @@ public class ItemsManager {
         this.dataSource = dataSource;
     }
 
-    public List<Item> getItemsForUserIds(List<String> userIds, String nameFilter) throws SQLException{
+    public List<Item> getItemsForUserIds(List<String> userIds, String nameFilter, List<String> categories) throws SQLException{
         List<Item> itemList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
             Statement statement = connection.createStatement();
@@ -32,6 +32,7 @@ public class ItemsManager {
             StringBuilder sqlBuilder = new StringBuilder("SELECT * from items i left join ItemSoldInfo isi on i.id = isi.itemId ");
 
             boolean nameFilterAdded = false;
+            boolean categoryFilterAdded = false;
             if (userIds != null && !userIds.isEmpty()) {
                 sqlBuilder.append(" where userId in (");
                 sqlBuilder.append("'").append(userIds.get(0)).append("'");
@@ -45,10 +46,24 @@ public class ItemsManager {
                     sqlBuilder.append(" and i.name like *").append(nameFilter).append("*");
                     nameFilterAdded = true;
                 }
+                if(categories != null && !categories.isEmpty()) {
+                    sqlBuilder.append("and i.category = '").append(categories.get(0).toUpperCase()).append("'");
+                    categoryFilterAdded = true;
+                }
             }
+
             if(!nameFilterAdded && nameFilter!= null) {
                 sqlBuilder.append(" where i.name like '%").append(nameFilter).append("%'");
+                if(categories != null && !categories.isEmpty()) {
+                    sqlBuilder.append("and i.category = '").append(categories.get(0).toUpperCase()).append("'");
+                    categoryFilterAdded = true;
+                }
             }
+
+            if(!categoryFilterAdded && categories != null && !categories.isEmpty()) {
+                sqlBuilder.append("where i.category = '").append(categories.get(0).toUpperCase()).append("'");
+            }
+
 
             ResultSet resultSet = statement.executeQuery(sqlBuilder.toString());
             while (resultSet.next()) {
@@ -158,6 +173,7 @@ public class ItemsManager {
 
             if(resourceAdded > 0 && itemAdded > 0) {
                 connection.commit();
+                System.out.println("Commited data for item id - " + addedItemId);
                 return 1;
             } else {
                 return 0;
@@ -220,6 +236,7 @@ public class ItemsManager {
             }
             if(resourceAdded > 0 && itemUpdated > 0) {
                 connection.commit();
+                System.out.println("Committed data for item id - " + item.getId());
                 return 1;
             } else {
                 return 0;

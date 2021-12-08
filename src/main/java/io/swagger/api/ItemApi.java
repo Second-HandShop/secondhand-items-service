@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-08T06:06:07.363Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-08T19:27:18.275Z")
 
 @Validated
 @Api(value = "item", description = "the item API")
@@ -57,7 +57,7 @@ public interface ItemApi {
     @RequestMapping(value = "/item",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<GetItemsByUserIdsResponse> getItemsByUserIds(@ApiParam(value = "Items posted by given userIds will be retrieved") @Valid @RequestParam(value = "userIds", required = false) List<String> userIds,@ApiParam(value = "Item name for search") @Valid @RequestParam(value = "name", required = false) String name);
+    ResponseEntity<GetItemsByUserIdsResponse> getItemsByUserIds(@ApiParam(value = "Items posted by given userIds will be retrieved") @Valid @RequestParam(value = "userIds", required = false) List<String> userIds,@ApiParam(value = "Items with given categories will be retrieved") @Valid @RequestParam(value = "categories", required = false) List<String> categories,@ApiParam(value = "Item name for search") @Valid @RequestParam(value = "name", required = false) String name);
 
 
     @ApiOperation(value = "Update an existing Item", nickname = "updateItem", notes = "", tags={ "item", })

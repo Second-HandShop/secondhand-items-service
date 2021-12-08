@@ -51,18 +51,18 @@ public class ItemApiController implements ItemApi {
             if(added == 0) {
                 throw new Exception("Could not add data.");
             }
-            return new ResponseEntity<Void>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception: ", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public ResponseEntity<GetItemsByUserIdsResponse> getItemsByUserIds(@ApiParam(value = "Items posted by given userIds will be retrieved") @Valid @RequestParam(value = "userIds", required = false) List<String> userIds,@ApiParam(value = "Item name for search") @Valid @RequestParam(value = "name", required = false) String name) {
+    public ResponseEntity<GetItemsByUserIdsResponse> getItemsByUserIds(@ApiParam(value = "Items posted by given userIds will be retrieved") @Valid @RequestParam(value = "userIds", required = false) List<String> userIds,@ApiParam(value = "Items with given categories will be retrieved") @Valid @RequestParam(value = "categories", required = false) List<String> categories,@ApiParam(value = "Item name for search") @Valid @RequestParam(value = "name", required = false) String name) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                List<Item> itemList = itemsManager.getItemsForUserIds(userIds, name);
+                List<Item> itemList = itemsManager.getItemsForUserIds(userIds, name, categories);
                 Map<String, List<Item>> userIdsToIdsMap = new HashMap<>();
 
                 itemList.forEach( item -> {
@@ -96,7 +96,7 @@ public class ItemApiController implements ItemApi {
             if(updated == 0) {
                 throw new Exception("Could not update data.");
             }
-            return new ResponseEntity<Void>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception: ", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -111,7 +111,7 @@ public class ItemApiController implements ItemApi {
             if (updated == 0) {
                 throw new Exception("Could not update data.");
             }
-            return new ResponseEntity<Void>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception: ", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
