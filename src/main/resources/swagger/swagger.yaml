@@ -117,6 +117,30 @@ paths:
       responses:
         "405":
           description: "Invalid input"
+  /item/bought:
+    get:
+      tags:
+        - "item"
+      summary: "Finds items bought by the user"
+      description: "Multiple UserId values can be provided with comma separated strings"
+      operationId: "getBoughtItemsByUserIds"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "userIds"
+          in: "query"
+          description: "Items bought by given userIds will be retrieved"
+          type: "array"
+          items:
+            type: "string"
+          collectionFormat: "multi"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/GetItemsByUserIdsResponse"
+        "400":
+          description: "Invalid UserIds value"
 definitions:
   GetItemsByUserIdsResponse:
     type: "object"

@@ -64,6 +64,53 @@ public class ItemsManager {
                 sqlBuilder.append("where i.category = '").append(categories.get(0).toUpperCase()).append("'");
             }
 
+            //orderBy date created
+            sqlBuilder.append(" ORDER BY i.addedOn desc");
+
+            ResultSet resultSet = statement.executeQuery(sqlBuilder.toString());
+            while (resultSet.next()) {
+                Item item = new Item();
+                item.setId(resultSet.getLong("id"));
+                item.setName(resultSet.getString("name"));
+                item.setAddedOn(OffsetDateTime.ofInstant(Instant.ofEpochMilli(resultSet.getTimestamp("addedOn").getTime()), ZoneOffset.UTC));
+                item.setCategory(resultSet.getString("category"));
+                item.setUserId(resultSet.getString("userId"));
+                item.setPrice(resultSet.getFloat("price"));
+                item.setDescription(resultSet.getString("description"));
+
+                if (resultSet.getBoolean("isSold")) {
+                    SoldInfo soldInfo = new SoldInfo();
+                    soldInfo.setSoldOn(OffsetDateTime.ofInstant(Instant.ofEpochMilli(resultSet.getTimestamp("soldOn").getTime()), ZoneOffset.UTC));
+                    soldInfo.setSoldAtPrice(resultSet.getFloat("soldAtPrice"));
+                    soldInfo.setSoldToUserId(resultSet.getString("soldToUserId"));
+                    item.setSoldInfo(soldInfo);
+                } else {
+                    item.setSoldInfo(null);
+                }
+                itemList.add(item);
+            }
+
+            getResourcesForItems(itemList, connection);
+        } catch (SQLException se) {
+            System.out.println("Error: " + se.getMessage());
+        }
+        return itemList;
+    }
+
+    public List<Item> getBoughtItemsForUserIds(List<String> userIds) throws SQLException{
+        List<Item> itemList = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection()) {
+            Statement statement = connection.createStatement();
+
+            StringBuilder sqlBuilder = new StringBuilder("SELECT * from items i left join ItemSoldInfo isi on i.id = isi.itemId ");
+
+            if (userIds != null && !userIds.isEmpty()) {
+                sqlBuilder.append(" where isi.soldToUserId in (");
+                sqlBuilder.append("'").append(userIds.get(0)).append("'").append(")");
+            }
+
+            //orderBy date created
+            sqlBuilder.append(" ORDER BY isi.soldOn desc");
 
             ResultSet resultSet = statement.executeQuery(sqlBuilder.toString());
             while (resultSet.next()) {
@@ -204,6 +251,7 @@ public class ItemsManager {
             statement.setString(index++, itemResource.getResourceLink());
             statement.setLong(index, itemId);
             statement.addBatch();
+            index = 1;
         }
 
         return statement.executeBatch().length;

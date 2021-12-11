@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-08T19:27:18.275Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-10T02:01:00.731Z")
 
 @Validated
 @Api(value = "item", description = "the item API")
@@ -48,6 +48,16 @@ public interface ItemApi {
         consumes = { "application/json" },
         method = RequestMethod.POST)
     ResponseEntity<Void> addItemSoldInfo(@ApiParam(value = "Item Sold Info object that needs to be added." ,required=true )  @Valid @RequestBody SoldInfo body);
+
+
+    @ApiOperation(value = "Finds items bought by the user", nickname = "getBoughtItemsByUserIds", notes = "Multiple UserId values can be provided with comma separated strings", response = GetItemsByUserIdsResponse.class, tags={ "item", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "successful operation", response = GetItemsByUserIdsResponse.class),
+        @ApiResponse(code = 400, message = "Invalid UserIds value") })
+    @RequestMapping(value = "/item/bought",
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
+    ResponseEntity<GetItemsByUserIdsResponse> getBoughtItemsByUserIds(@ApiParam(value = "Items bought by given userIds will be retrieved") @Valid @RequestParam(value = "userIds", required = false) List<String> userIds);
 
 
     @ApiOperation(value = "Finds items", nickname = "getItemsByUserIds", notes = "Multiple UserId values can be provided with comma separated strings", response = GetItemsByUserIdsResponse.class, tags={ "item", })

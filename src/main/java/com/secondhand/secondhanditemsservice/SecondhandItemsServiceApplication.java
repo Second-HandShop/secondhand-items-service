@@ -57,9 +57,9 @@ public class SecondhandItemsServiceApplication {
 		{
 			DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
 			dataSourceBuilder.driverClassName("com.mysql.cj.jdbc.Driver");
-			dataSourceBuilder.url("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5455625");
-			dataSourceBuilder.username("sql5455625");
-			dataSourceBuilder.password("yHTFCRQrk5");
+			dataSourceBuilder.url("jdbc:mysql://localhost:3306/second_hand");
+			dataSourceBuilder.username("root");
+			dataSourceBuilder.password("Rabu#MYSQL2021");
 			return dataSourceBuilder.build();
 		}
 	}

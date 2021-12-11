@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -118,4 +119,32 @@ public class ItemApiController implements ItemApi {
         }
     }
 
+    public ResponseEntity<GetItemsByUserIdsResponse> getBoughtItemsByUserIds(@ApiParam(value = "Items bought by given userIds will be retrieved") @Valid @RequestParam(value = "userIds", required = false) List<String> userIds) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            try {
+                List<Item> itemList = itemsManager.getBoughtItemsForUserIds(userIds);
+                Map<String, List<Item>> userIdsToIdsMap = new HashMap<>();
+
+                itemList.forEach( item -> {
+                    if(userIdsToIdsMap.get(item.getUserId()) == null) {
+                        List<Item> items = new ArrayList<>();
+                        items.add(item);
+                        userIdsToIdsMap.put(item.getUserId(), items);
+                    } else {
+                        userIdsToIdsMap.get(item.getUserId()).add(item);
+                    }
+                });
+
+                GetItemsByUserIdsResponse getItemsByUserIdsResponse = new GetItemsByUserIdsResponse();
+                getItemsByUserIdsResponse.setUserIdsToIdsMap(userIdsToIdsMap);
+                return new ResponseEntity<GetItemsByUserIdsResponse>(getItemsByUserIdsResponse, HttpStatus.OK);
+            } catch (Exception e) {
+                log.error("Exception: ", e);
+                return new ResponseEntity<GetItemsByUserIdsResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return new ResponseEntity<GetItemsByUserIdsResponse>(HttpStatus.NOT_IMPLEMENTED);
+    }
 }
